@@ -1,0 +1,195 @@
+type: collection.insomnia.rest/5.0
+name: NPM
+meta:
+  id: wrk_12d9fd8fcc5042b7a6644ae0d5bb4e9d
+  created: 1744304957875
+  modified: 1744304957875
+collection:
+  - url: "{{ _._BASEURL_ }}users/3"
+    name: DELETE USER
+    meta:
+      id: req_4a6b95690df446ff8f684bb23d3db5ce
+      created: 1744633063586
+      modified: 1744633932016
+      isPrivate: false
+      sortKey: -1744633063586
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    authentication:
+      type: bearer
+      token: "{{ _.userTOKEN }}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _._BASEURL_ }}users/1"
+    name: PUT USER
+    meta:
+      id: req_0023e8baef5047409f67a39b8a19a56e
+      created: 1744633073727
+      modified: 1744633890453
+      isPrivate: false
+      sortKey: -1744633073727
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "Tavo",
+          "email": "gustavo@email.com",
+          "age": 25
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.0.2
+    authentication:
+      type: bearer
+      token: "{{ _.userTOKEN }}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _._BASEURL_ }}users/2"
+    name: GET User by ID
+    meta:
+      id: req_cd75e6e62a184dd68ee233a9982fd095
+      created: 1744633083911
+      modified: 1744633877035
+      isPrivate: false
+      sortKey: -1744633083911
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    authentication:
+      type: bearer
+      token: "{{ _.userTOKEN }}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _._BASEURL_ }}users"
+    name: GET USER
+    meta:
+      id: req_b80708458a4f4261a6d680481f6f9a74
+      created: 1744633085228
+      modified: 1744633851889
+      isPrivate: false
+      sortKey: -1744633085228
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    authentication:
+      type: bearer
+      token: "{{ _.userTOKEN }}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _._BASEURL_ }}users"
+    name: Registro
+    meta:
+      id: req_ab505a95372d40f6a61f156bb0cb61d3
+      created: 1744633091499
+      modified: 1744633782266
+      isPrivate: false
+      sortKey: -1744633091499
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "Gustavo",
+          "email": "gustavo@email.com",
+          "age": 25
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _._BASEURL_ }}auth/login"
+    name: Login
+    meta:
+      id: req_d6087ba463e54acd8aa2629b8641e525
+      created: 1744633092766
+      modified: 1744633798675
+      isPrivate: false
+      sortKey: -1744633092766
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "name": "Gustavo",
+          "email": "gustavo@email.com"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_7e2d0b5eec38bfcd01ce253bbaa82d9664aebd4f
+    created: 1744304957878
+    modified: 1744304957878
+environments:
+  name: Base Environment
+  meta:
+    id: env_7e2d0b5eec38bfcd01ce253bbaa82d9664aebd4f
+    created: 1744304957877
+    modified: 1744633833188
+    isPrivate: false
+  data:
+    _BASEURL_: http://localhost:3000/
+    userTOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJndXN0YXZvQGVtYWlsLmNvbSIsImlhdCI6MTc0NDYzMzgwMiwiZXhwIjoxNzQ0NjM3NDAyfQ.QxY3gMVXMA-heEtNrDIQmoA8GLKWtWqAjiCy4QIcGMs
+  subEnvironments:
+    - name: New Environment
+      meta:
+        id: env_ea9467fef8da43ecae015c6578da4f01
+        created: 1744633187136
+        modified: 1744633359039
+        isPrivate: false
+        sortKey: 1744633187136
+      data:
+        "":
+          baseURL: http://localhost:3000
