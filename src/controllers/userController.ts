@@ -4,10 +4,13 @@ import { generateToken } from "../services/JWTService";
 
 export const postLOGIN = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email } = req.body;
+    const { email, name } = req.body;
 
     if (!email) {
-      res.status(400).json({ error: "Email nulo" });
+      res.status(400).json({ error: "O campo email é obrigatório" });
+      return;
+    } else if (!name) {
+      res.status(400).json({ error: "O campo name é obrigatório" });
       return;
     }
 
@@ -34,6 +37,14 @@ export const postLOGIN = async (req: Request, res: Response): Promise<void> => {
 
 export const postUSER = async (req: Request, res: Response): Promise<void> => {
   const { name, email, age } = req.body;
+
+  if (!name) {
+    res.status(400).json({ error: "O campo name é obrigatorio" });
+    return;
+  } else if (!email) {
+    res.status(400).json({ error: "O campo email é obrigatorio" });
+  }
+
   try {
     const existeEmail = await User.findOne({ where: { email } });
     if (existeEmail) {
@@ -60,10 +71,29 @@ export const postUSER = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const getUSERS = async (req: Request, res: Response): Promise<void> => {
-  const users = await User.findAll();
+  try {
+    const pagina = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const offset = (pagina - 1) * limit;
 
-  res.json(users);
-  return;
+    const { count: total, rows: users } = await User.findAndCountAll({
+      limit,
+      offset,
+    });
+
+    res.json({
+      users,
+      Paginacao: {
+        Total: total,
+        Pagina: pagina,
+        Limite: limit,
+        Paginas_Totais: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+    res.status(500).json({ error: "Erro ao buscar usuários" });
+  }
 };
 
 export const getUSERID = async (req: Request, res: Response): Promise<void> => {
