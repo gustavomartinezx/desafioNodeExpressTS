@@ -2,97 +2,137 @@ import { Request, Response } from "express";
 import User from "../models/user";
 import { generateToken } from "../services/JWTService";
 
-export const postLOGIN = async (req: Request, res: Response) => {
-  const { email } = req.body;
+export const postLOGIN = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ error: "Email nulo" });
-  }
+    if (!email) {
+      res.status(400).json({ error: "Email nulo" });
+      return;
+    }
 
-  const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email } });
 
-  if (!user) {
-    return res.status(401).json({
-      error: "Usuário não está no banco de dados, por-favor registre-o",
+    if (!user) {
+      res.status(401).json({
+        error: "Usuário não está no banco de dados, por-favor registre-o",
+      });
+      return;
+    }
+
+    const token = generateToken({
+      id: user.getDataValue("id"),
+      email: user.getDataValue("email"),
     });
+
+    res.json({ token });
+  } catch (error) {
+    console.error("Erro no login:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
-
-  const token = generateToken({
-    id: user.getDataValue("id"),
-    email: user.getDataValue("email"),
-  });
-
-  res.json({ token });
 };
 
-export const postUSER = async (req: Request, res: Response) => {
+export const postUSER = async (req: Request, res: Response): Promise<void> => {
   const { name, email, age } = req.body;
+  try {
+    const existeEmail = await User.findOne({ where: { email } });
+    if (existeEmail) {
+      res.status(400).json({ error: "Email já cadastrado" });
+      return;
+    }
 
-  const user = await User.create({
-    name,
-    email,
-    age,
-  });
+    const user = await User.create({
+      name,
+      email,
+      age,
+    });
 
-  res.status(201).json({
-    id: user.getDataValue("id"),
-    name: user.getDataValue("name"),
-    email: user.getDataValue("email"),
-  });
+    res.status(201).json({
+      id: user.getDataValue("id"),
+      name: user.getDataValue("name"),
+      email: user.getDataValue("email"),
+    });
+    return;
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
 };
 
-export const getUSERS = async (req: Request, res: Response) => {
+export const getUSERS = async (req: Request, res: Response): Promise<void> => {
   const users = await User.findAll();
 
   res.json(users);
+  return;
 };
 
-export const getUSERID = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const getUSERID = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
 
-  const user = await User.findByPk(id);
+    const user = await User.findByPk(id);
 
-  if (!user) {
-    return res.status(404).json({ error: "Usuário não cadastrado" });
+    if (!user) {
+      res.status(404).json({ error: "Usuário não cadastrado" });
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Erro ao buscar usuário por ID:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
-
-  res.json(user);
 };
 
-export const putUSER = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { name, email, age } = req.body;
+export const putUSER = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { name, email, age } = req.body;
 
-  const user = await User.findByPk(id);
+    const user = await User.findByPk(id);
 
-  if (!user) {
-    return res.status(404).json({ error: "ID de usuário não existente" });
+    if (!user) {
+      res.status(404).json({ error: "ID de usuário não existente" });
+      return;
+    }
+
+    if (name) user.setDataValue("name", name);
+    if (email) user.setDataValue("email", email);
+    if (age !== undefined) user.setDataValue("age", age);
+
+    await user.save();
+
+    res.json({
+      id: user.getDataValue("id"),
+      name: user.getDataValue("name"),
+      email: user.getDataValue("email"),
+      age: user.getDataValue("age"),
+    });
+  } catch (error) {
+    console.error("Erro ao atualizar usuário:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
-
-  if (name) user.setDataValue("name", name);
-  if (email) user.setDataValue("email", email);
-  if (age !== undefined) user.setDataValue("age", age);
-
-  await user.save();
-
-  res.json({
-    id: user.getDataValue("id"),
-    name: user.getDataValue("name"),
-    email: user.getDataValue("email"),
-    age: user.getDataValue("age"),
-  });
 };
 
-export const deleteUSER = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const deleteUSER = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
 
-  const user = await User.findByPk(id);
+    const user = await User.findByPk(id);
 
-  if (!user) {
-    return res.status(404).json({ error: "ID de usuário não existente" });
+    if (!user) {
+      res.status(404).json({ error: "ID de usuário não existente" });
+      return;
+    }
+
+    await user.destroy();
+
+    res.status(204).send();
+  } catch (error) {
+    console.error("Erro ao deletar usuário:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
-
-  await user.destroy();
-
-  res.status(204).json({ message: "Usuário removido" });
 };

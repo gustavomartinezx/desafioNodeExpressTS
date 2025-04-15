@@ -8,11 +8,12 @@ export const authMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ error: "Token não definido" });
+    res.status(401).json({ error: "Token não definido" });
+    return;
   }
 
   try {
@@ -20,6 +21,7 @@ export const authMiddleware = (
     (req as any).user = decoded;
     next();
   } catch {
-    return res.status(401).json({ error: "Token inválido" });
+    res.status(401).json({ error: "Token inválido" });
+    return;
   }
 };
