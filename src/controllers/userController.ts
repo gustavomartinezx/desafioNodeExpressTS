@@ -43,6 +43,7 @@ export const postUSER = async (req: Request, res: Response): Promise<void> => {
     return;
   } else if (!email) {
     res.status(400).json({ error: "O campo email é obrigatorio" });
+    return;
   }
 
   try {
@@ -127,7 +128,7 @@ export const putUSER = async (req: Request, res: Response): Promise<void> => {
     }
 
     const existeEmail = await User.findOne({ where: { email } });
-    if (existeEmail) {
+    if (existeEmail && existeEmail.getDataValue("id") !== Number(id)) {
       res.status(400).json({ error: "Email já cadastrado" });
       return;
     }
