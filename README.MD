@@ -98,3 +98,21 @@ Adicione ou edite a variável assim:
 ```
 
 Com isso, você pode testar facilmente todos os endpoints autenticados e não autenticados do seu projeto no Insomnia
+
+## 🧪 Testes Unitários
+
+O projeto utiliza o **Jest** na lógica de testes unitários
+
+### ▶️ Executando os testes
+
+Para rodar os testes, basta usar o seguinte comando:
+
+```
+npm test
+```
+
+Um exemplo de teste implementado:
+
+Na rota POSTUser, o usuário não pode utilizar o e-mail já existente no banco de dados.
+
+Ele irá dar o checkmark e mostrar o tempo que esse teste teve.
