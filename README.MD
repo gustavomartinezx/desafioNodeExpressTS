@@ -7,6 +7,7 @@ Este é um projeto de CRUD para o INOVATEC. Ele inclui autenticação com JWT, b
 ## Tecnologias utilizadas
 
 - Node.js
+- Jest
 - TypeScript
 - Express
 - Sequelize
