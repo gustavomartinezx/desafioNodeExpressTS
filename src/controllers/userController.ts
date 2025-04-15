@@ -126,6 +126,12 @@ export const putUSER = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const existeEmail = await User.findOne({ where: { email } });
+    if (existeEmail) {
+      res.status(400).json({ error: "Email já cadastrado" });
+      return;
+    }
+
     if (name) user.setDataValue("name", name);
     if (email) user.setDataValue("email", email);
     if (age !== undefined) user.setDataValue("age", age);
